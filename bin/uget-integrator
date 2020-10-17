@@ -54,30 +54,30 @@ if sys.platform == 'win32':
     creation_flags |= 0x01000000
 
 
-def extract_file_name(url):
-    fileName = ''
-    if 'googlevideo.com/' in url and '&title=' in url:
-        # Youtube video
-        logger.debug('Found Youtube video')
-        url = urllib.parse.unquote(url)
-        url_components = url.split('&')
-        for smt in url_components:
-            if smt.startswith('title='):
-                title = smt.replace('title=', '').replace('+', ' ')
-            elif smt.startswith('mime='):
-                mime = smt.replace('mime=', '')
+# def extract_file_name(url):
+    # fileName = ''
+    # if 'googlevideo.com/' in url and '&title=' in url:
+        # # Youtube video
+        # logger.debug('Found Youtube video')
+        # url = urllib.parse.unquote(url)
+        # url_components = url.split('&')
+        # for smt in url_components:
+            # if smt.startswith('title='):
+                # title = smt.replace('title=', '').replace('+', ' ')
+            # elif smt.startswith('mime='):
+                # mime = smt.replace('mime=', '')
 
-        if title:
-            fileName = title
-            if mime:
-                fileName += guess_extension(mime)
-            logger.debug('Youtube filename: ' + fileName)
-    elif 'www.youtube.com/watch' in url:
-        fileName = ''
-    else:
-        fileName = basename(urlparse(url).path).replace('%20', ' ')
+        # if title:
+            # fileName = title
+            # if mime:
+                # fileName += guess_extension(mime)
+            # logger.debug('Youtube filename: ' + fileName)
+    # elif 'www.youtube.com/watch' in url:
+        # fileName = ''
+    # else:
+        # fileName = basename(urlparse(url).path).replace('%20', ' ')
 
-    return fileName
+    # return fileName
 
 
 def send_message(message):
@@ -175,9 +175,10 @@ def read_message():
                     download_all_links(data)
                     return
                 use_cookie_file = False
-                fileName = data['FileName']
+                fileName = basename(data['FileName'])
                 cookie = data['Cookies']
                 referer = data['Referer']
+                userAgent = data['UserAgent']
                 command = [UGET_COMMAND]
                 if cookie:
                     try:
@@ -186,13 +187,17 @@ def read_message():
                         use_cookie_file = True
                     except Exception as e:
                         pass
-                if not fileName:
-                    fileName = extract_file_name(url)
-                else:
-                    # Sometimes Firefox sends complete path
-                    fileName = basename(fileName)
+                # if not fileName:
+                    # fileName = extract_file_name(url)
+                # else:
+                    # # Sometimes Firefox sends complete path
+                    # fileName = basename(fileName)
 
                 # Add the referer url
+                if userAgent:
+                    command.append("--http-user-agent=" + userAgent)
+                    # Add the referer url
+                    
                 if referer:
                     command.append("--http-referer=" + referer)
 
