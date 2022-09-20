@@ -4,7 +4,7 @@
 @cd /d "%~dp0"
 
 SET "current_path=%~dp0uget-integrator.bat"
-SET "current_path=%current_path:\=/%"
+SET "current_path=%current_path:\=\\%"
 
 :: Create JSON config files
 @echo {"name":"com.ugetdm.chrome","description":"Integrate uGet with Google Chrome","path":"%current_path%","type":"stdio","allowed_origins":["chrome-extension://efjgjleilhflffpbnkaofpmdnajdpepi/","chrome-extension://akcbnhoidebjpiefdkmaaicfgdpbnoac/"]}> com.ugetdm.chrome.json
