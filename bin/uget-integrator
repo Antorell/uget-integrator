@@ -203,7 +203,7 @@ def read_message():
 
                 # Add the file name
                 if fileName:
-                    command.append("--filename=" + unquote(fileName))
+                    command.append("--filename=" + fileName)
 
                 # Add the cookie file
                 if use_cookie_file:
