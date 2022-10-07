@@ -175,7 +175,7 @@ def read_message():
                     download_all_links(data)
                     return
                 use_cookie_file = False
-                fileName = basename(data['FileName'])
+                fileName = basename(unquote(data['FileName']))
                 cookie = data['Cookies']
                 referer = data['Referer']
                 userAgent = data['UserAgent']
